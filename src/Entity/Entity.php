@@ -31,6 +31,11 @@ class Entity extends Element
     #[ORM\OrderBy([ "id" => "ASC" ])]
     protected Collection $products;
 
+    /* Collection of associations the entity is part of */
+    #[ORM\ManyToMany(targetEntity: Association::class, mappedBy: "entities")]
+    #[ORM\OrderBy([ "id" => "ASC" ])]
+    protected Collection $associations;
+
     /**
      * Entity constructor.
      *
@@ -52,6 +57,8 @@ class Entity extends Element
         $this->persons = new ArrayCollection();
         /* Initialize products collection */
         $this->products = new ArrayCollection();
+        /* Initialize associations collection */
+        $this->associations = new ArrayCollection();
     }
 
     // Persons
@@ -153,6 +160,60 @@ class Entity extends Element
     {
         $result = $this->products->removeElement($product);
         $product->removeEntity($this);
+        return $result;
+    }
+
+    // Associations
+
+    /**
+     * Gets the associations the entity is part of
+     *
+     * @return Collection<Association>
+     */
+    public function getAssociations(): Collection
+    {
+        return $this->associations;
+    }
+
+    /**
+     * Determines if the entity is part of the association
+     *
+     * @param Association $association
+     *
+     * @return bool
+     */
+    public function containsAssociation(Association $association): bool
+    {
+        return $this->associations->contains($association);
+    }
+
+    /**
+     * Add an association to this entity
+     *
+     * @param Association $association
+     *
+     * @return void
+     */
+    public function addAssociation(Association $association): void
+    {
+        if (!$this->containsAssociation($association)) {
+            $this->associations->add($association);
+        }
+        $this->associations->add($association);
+        $association->addEntity($this);
+    }
+
+    /**
+     * Remove an association from this entity
+     *
+     * @param Association $association
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeAssociation(Association $association): bool
+    {
+        $result = $this->associations->removeElement($association);
+        $association->removeEntity($this);
         return $result;
     }
 
