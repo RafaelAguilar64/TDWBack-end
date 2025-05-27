@@ -48,7 +48,18 @@ final class PersonRelationsController extends ElementRelationsBaseController
      */
     public function getEntities(Request $request, Response $response, array $args): Response
     {
-        // @TODO
+            $personId = $args[PersonQueryController::getEntityIdName()] ?? 0;
+        if ($personId <= 0 || $personId > 2147483647) {   // 404
+            return $this->getElements($request, $response, null, EntityQueryController::getEntitiesTag(), []);
+        }
+        /** @var Person|null $person */
+        $person = $this->entityManager
+            ->getRepository(PersonQueryController::getEntityClassName())
+            ->find($personId);
+
+        $entities = $person?->getEntities()->getValues() ?? [];
+
+        return $this->getElements($request, $response, $person, EntityQueryController::getEntitiesTag(), $entities);
     }
 
     /**
@@ -64,7 +75,12 @@ final class PersonRelationsController extends ElementRelationsBaseController
      */
     public function operationEntity(Request $request, Response $response, array $args): Response
     {
-        // @TODO
+        return $this->operationRelatedElements(
+            $request,
+            $response,
+            $args,
+            EntityQueryController::getEntityClassName()
+        );
     }
 
     /**
@@ -78,7 +94,18 @@ final class PersonRelationsController extends ElementRelationsBaseController
      */
     public function getProducts(Request $request, Response $response, array $args): Response
     {
-        // @TODO
+            $personId = $args[PersonQueryController::getEntityIdName()] ?? 0;
+        if ($personId <= 0 || $personId > 2147483647) {   // 404
+            return $this->getElements($request, $response, null, ProductQueryController::getEntitiesTag(), []);
+        }
+        /** @var Person|null $person */
+        $person = $this->entityManager
+            ->getRepository(PersonQueryController::getEntityClassName())
+            ->find($personId);
+
+        $products = $person?->getProducts()->getValues() ?? [];
+
+        return $this->getElements($request, $response, $person, ProductQueryController::getEntitiesTag(), $products);
     }
 
     /**
@@ -94,6 +121,11 @@ final class PersonRelationsController extends ElementRelationsBaseController
      */
     public function operationProduct(Request $request, Response $response, array $args): Response
     {
-        // @TODO
+        return $this->operationRelatedElements(
+            $request,
+            $response,
+            $args,
+            ProductQueryController::getEntityClassName()
+        );
     }
 }
