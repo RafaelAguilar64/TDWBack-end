@@ -79,11 +79,9 @@ class Association extends Element
      */
     public function addEntity(Entity $entity): void
     {
-        if ($this->containsEntity($entity)) {
-            return;
+        if (!$this->containsEntity($entity)) {
+            $this->entities->add($entity);
         }
-
-        $this->entities->add($entity);
     }
 
     /**

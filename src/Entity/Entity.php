@@ -197,10 +197,9 @@ class Entity extends Element
     public function addAssociation(Association $association): void
     {
         if (!$this->containsAssociation($association)) {
-            $this->associations->add($association);
-        }
         $this->associations->add($association);
         $association->addEntity($this);
+        }
     }
 
     /**
@@ -243,6 +242,8 @@ class Entity extends Element
         $data['products'] = $numProducts !== 0 ? $this->getCodes($this->getProducts()) : null;
         $numPersons = count($this->getPersons());
         $data['persons'] = $numPersons !== 0 ? $this->getCodes($this->getPersons()) : null;
+        $numAssociations = count($this->getAssociations());
+        $data['associations'] = $numAssociations !== 0 ? $this->getCodes($this->getAssociations()) : [];
 
         return [strtolower($reflection->getShortName()) => $data];
     }

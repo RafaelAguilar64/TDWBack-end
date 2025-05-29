@@ -24,6 +24,7 @@ use function PHPUnit\Framework\assertNotEmpty;
 #[TestsAttr\CoversClass(Factory\EntityFactory::class)]
 #[TestsAttr\UsesClass(Factory\PersonFactory::class)]
 #[TestsAttr\UsesClass(Factory\ProductFactory::class)]
+#[TestsAttr\UsesClass(Factory\AssociationFactory::class)]
 class EntityTest extends TestCase
 {
     protected static Entity $entity;
@@ -150,6 +151,24 @@ class EntityTest extends TestCase
         self::assertCount(0, self::$entity->getProducts());
         self::assertFalse(self::$entity->removeProduct($product));
         self::assertFalse($product->containsEntity(self::$entity));
+    }
+
+    public function testGetAddContainsRemoveAssociations(): void
+    {
+        self::assertEmpty(self::$entity->getAssociations());
+        $slug = self::$faker->slug();
+        self::assertNotEmpty($slug);
+        $association = Factory\AssociationFactory::createElement($slug);
+
+        self::$entity->addAssociation($association);
+        self::$entity->addAssociation($association);  // CC
+        self::assertNotEmpty(self::$entity->getAssociations());
+        self::assertTrue(self::$entity->containsAssociation($association));
+
+        self::$entity->removeAssociation($association);
+        self::assertFalse(self::$entity->containsAssociation($association));
+        self::assertCount(0, self::$entity->getAssociations());
+        self::assertFalse(self::$entity->removeAssociation($association));
     }
 
     public function testToString(): void

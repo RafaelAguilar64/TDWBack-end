@@ -538,6 +538,567 @@ paths:
         '204':
           $ref: '#/components/responses/Response_Options'
 
+  '/entities':
+    get:
+      tags: [ '🏛️ Entities' ]
+      summary: Retrieves the collection of Entity resources.
+      operationId: readEntities
+      parameters:
+        - $ref: '#/components/parameters/elementTextParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Object containing an array of Entities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entity'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    post:
+      tags: [ '🏛️ Entities' ]
+      summary: Creates an Entity resource.
+      operationId: createEntity
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      responses:
+        '201':
+          description: Entity created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+    options:
+      tags: [ '🏛️ Entities' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsEntities
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  '/entities/{entityId}':
+    parameters:
+      - $ref: '#/components/parameters/entityId'
+    get:
+      tags: [ '🏛️ Entities' ]
+      summary: Retrieves an Entity resource by ID.
+      operationId: readEntity
+      responses:
+        '200':
+          description: Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      tags: [ '🏛️ Entities' ]
+      summary: Updates the Entity resource.
+      operationId: updateEntity
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      responses:
+        '209':
+          description: Entity updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '428':
+          $ref: '#/components/responses/Response_428'
+    delete:
+      tags: [ '🏛️ Entities' ]
+      summary: Removes the Entity resource.
+      operationId: deleteEntity
+      responses:
+        '204':
+          description: Entity deleted <Response body is empty>
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🏛️ Entities' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsEntity
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/entities/{entityId}/{elementType}':
+    parameters:
+      - $ref: '#/components/parameters/entityId'
+      - $ref: '#/components/parameters/elementProductRelParam'
+    get:
+      tags: [ '🏛️ Entities' ]
+      summary: List of elements related to the entity
+      description: Returns the elements related to the entity `entityId`
+      operationId: readEntityElements
+      responses:
+        '200':
+          description: Array of Elements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  persons:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Person'
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🏛️ Entities' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsEntityElements
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/entities/{entityId}/{elementType}/{operationType}/{elementId}':
+    parameters:
+      - $ref: '#/components/parameters/entityId'
+      - $ref: '#/components/parameters/elementProductRelParam'
+      - $ref: '#/components/parameters/operationParam'
+      - $ref: '#/components/parameters/elementId'
+    put:
+      tags: [ '🏛️ Entities' ]
+      summary: Sets or removes the relationship entity-element
+      description: Establishes/Removes the relationship of the entity with the element
+      operationId: api_entities_add_rem_element
+      responses:
+        '209':
+          description: '`Content Returned`: entity is now updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '406':
+          $ref: '#/components/responses/Response_406'
+    options:
+      tags: [ '🏛️ Entities' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsEntitiesOpElement
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  '/persons':
+    get:
+      tags: [ '🧑 Persons' ]
+      summary: Retrieves the collection of Person resources.
+      operationId: readPersons
+      parameters:
+        - $ref: '#/components/parameters/elementTextParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Object containing an array of Persons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  persons:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Person'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    post:
+      tags: [ '🧑 Persons' ]
+      summary: Creates a Person resource.
+      operationId: createPerson
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      responses:
+        '201':
+          description: Person created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+    options:
+      tags: [ '🧑 Persons' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsPersons
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  '/persons/{personId}':
+    parameters:
+      - $ref: '#/components/parameters/personId'
+    get:
+      tags: [ '🧑 Persons' ]
+      summary: Retrieves a Person resource by ID.
+      operationId: readPerson
+      responses:
+        '200':
+          description: Person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      tags: [ '🧑 Persons' ]
+      summary: Updates the Person resource.
+      operationId: updatePerson
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      responses:
+        '209':
+          description: Person updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '428':
+          $ref: '#/components/responses/Response_428'
+    delete:
+      tags: [ '🧑 Persons' ]
+      summary: Removes the Person resource.
+      operationId: deletePerson
+      responses:
+        '204':
+          description: Person deleted <Response body is empty>
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🧑 Persons' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsPerson
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/persons/{personId}/{elementType}':
+    parameters:
+      - $ref: '#/components/parameters/personId'
+      - $ref: '#/components/parameters/elementProductRelParam'
+    get:
+      tags: [ '🧑 Persons' ]
+      summary: List of elements related to the person
+      description: Returns the elements related to the person `personId`
+      operationId: readPersonElements
+      responses:
+        '200':
+          description: Array of Elements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entity'
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🧑 Persons' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsPersonElements
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/persons/{personId}/{elementType}/{operationType}/{elementId}':
+    parameters:
+      - $ref: '#/components/parameters/personId'
+      - $ref: '#/components/parameters/elementProductRelParam'
+      - $ref: '#/components/parameters/operationParam'
+      - $ref: '#/components/parameters/elementId'
+    put:
+      tags: [ '🧑 Persons' ]
+      summary: Sets or removes the relationship person-element
+      description: Establishes/Removes the relationship of the person with the element
+      operationId: api_persons_add_rem_element
+      responses:
+        '209':
+          description: '`Content Returned`: person is now updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '406':
+          $ref: '#/components/responses/Response_406'
+    options:
+      tags: [ '🧑 Persons' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsPersonsOpElement
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  '/associations':
+    get:
+      tags: [ '🔗 Associations' ]
+      summary: Retrieves the collection of Association resources.
+      operationId: readAssociations
+      parameters:
+        - $ref: '#/components/parameters/elementTextParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Object containing an array of Associations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  associations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Association'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    post:
+      tags: [ '🔗 Associations' ]
+      summary: Creates an Association resource.
+      operationId: createAssociation
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      responses:
+        '201':
+          description: Association created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Association'
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+    options:
+      tags: [ '🔗 Associations' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsAssociations
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  '/associations/{associationId}':
+    parameters:
+      - $ref: '#/components/parameters/associationId'
+    get:
+      tags: [ '🔗 Associations' ]
+      summary: Retrieves an Association resource by ID.
+      operationId: readAssociation
+      responses:
+        '200':
+          description: Association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Association'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      tags: [ '🔗 Associations' ]
+      summary: Updates the Association resource.
+      operationId: updateAssociation
+      requestBody:
+        $ref: '#/components/requestBodies/ElementRequestBody'
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      responses:
+        '209':
+          description: Association updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Association'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '428':
+          $ref: '#/components/responses/Response_428'
+    delete:
+      tags: [ '🔗 Associations' ]
+      summary: Removes the Association resource.
+      operationId: deleteAssociation
+      responses:
+        '204':
+          description: Association deleted <Response body is empty>
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🔗 Associations' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsAssociation
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/associations/{associationId}/entities':
+    parameters:
+      - $ref: '#/components/parameters/associationId'
+    get:
+      tags: [ '🔗 Associations' ]
+      summary: List of entities related to the association
+      description: Returns the entities related to the association `associationId`
+      operationId: readAssociationEntities
+      responses:
+        '200':
+          description: Array of Entities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entity'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      tags: [ '🔗 Associations' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsAssociationEntities
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  '/associations/{associationId}/entities/{operationType}/{entityId}':
+    parameters:
+      - $ref: '#/components/parameters/associationId'
+      - $ref: '#/components/parameters/operationParam'
+      - $ref: '#/components/parameters/entityId'
+    put:
+      tags: [ '🔗 Associations' ]
+      summary: Sets or removes the relationship association-entity
+      description: Establishes/Removes the relationship of the association with the entity
+      operationId: api_associations_add_rem_entity
+      responses:
+        '209':
+          description: '`Content Returned`: association is now updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Association'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '406':
+          $ref: '#/components/responses/Response_406'
+    options:
+      tags: [ '🔗 Associations' ]
+      summary: Provides the list of HTTP supported methods.
+      operationId: optionsAssociationsOpEntity
+      responses:
+        '204':
+          description: '`Allow` header <Response body is empty>'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
 components:
   schemas:
     User:
@@ -707,6 +1268,25 @@ components:
             wikiUrl: 'https://wiki02.example.com/Entity02'
             products: [ 1, 7 ]
             persons: [ 3, 17 ]
+    Association:
+      allOf:
+        - $ref: '#/components/schemas/Element'
+        - type: object
+          properties:
+            entities:
+              description: Array of Entity Ids
+              type: array
+              items:
+                type: integer
+      examples:
+        - association:
+            id: 5
+            name: Association05
+            birthDate: '2000-01-01'
+            deathDate: '2100-01-01'
+            imageUrl: 'https://image05.example.com/Association05.png'
+            wikiUrl: 'https://wiki05.example.com/Association05'
+            entities: [ 2, 3 ]
     Message:
       type: object
       description: HTTP response message
@@ -959,6 +1539,16 @@ components:
       name: entityId
       in: path
       description: ID of entity
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+        pattern: ^\d+$
+    associationId:
+      name: associationId
+      in: path
+      description: ID of association
       required: true
       schema:
         type: integer
